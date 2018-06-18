@@ -12,5 +12,6 @@ if torch.cuda.is_available():
     print(device)
 
     print(torch.cuda.get_device_properties(0))
-
+else:
+    print('GPU not enabled')
     
