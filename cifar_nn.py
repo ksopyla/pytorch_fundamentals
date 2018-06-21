@@ -2,6 +2,13 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
+# check if cuda is enabled
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+# Assume that we are on a CUDA machine, then this should print a CUDA device:
+print(device)
+
+
 
 transform = transforms.Compose(
     [transforms.ToTensor(),
@@ -70,6 +77,7 @@ class Net(nn.Module):
 
 
 net = Net()
+net.to(device)
 
 import torch.optim as optim
 
@@ -83,6 +91,8 @@ for epoch in range(2):  # loop over the dataset multiple times
     for i, data in enumerate(trainloader, 0):
         # get the inputs
         inputs, labels = data
+        # move data to device (GPU if enabled, else CPU do nothing)
+        inputs, labels = inputs.to(device), labels.to(device)
 
         # zero the parameter gradients
         optimizer.zero_grad()
