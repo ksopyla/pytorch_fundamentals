@@ -9,17 +9,29 @@ torch.manual_seed(1)
 
 
 ## affine maps
-lin = nn.Linear(5, 3)  # maps from R^5 to R^3, parameters A, b
+lin = nn.Linear(5, 3,bias=False)  # maps from R^5 to R^3, parameters A, b
 # data is 2x5.  A maps from 5 to 3... can we map "data" under A?
 data = torch.ones(2, 5)
 
 print(lin)
 print(lin.weight)
+print(lin.weight.shape)
 
 print(data)
 print(data.shape)
 
-print(lin(data))  # yes
+
+Ax = lin(data)
+print(Ax)  # yes
+print(Ax.shape)
+
+import numpy as np
+A = np.array(lin.weight.detach().numpy())
+x = np.ones((2,5))
+
+print(A)
+print(np.dot(x,A.T))
+
 
 # relu
 data = torch.randn(2, 2)
