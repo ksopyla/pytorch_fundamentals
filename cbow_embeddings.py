@@ -4,6 +4,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.autograd import Variable
 
+# Thanks to https://github.com/wjdghks950/CBOW_Word2Vec
+
 torch.manual_seed(1)
 
 
@@ -41,6 +43,11 @@ class CBOW(nn.Module):
         self.output = nn.Linear(128, vocab_size) 
  
     def forward(self, inputs):
+
+        # just for testing and learning
+        # print( self.embeddings(torch.tensor([ [1, 2], [2,1]])))
+        # print( sum(self.embeddings(torch.tensor([ [1, 2], [2,1]]))))
+
         embeds =sum(self.embeddings(inputs)).view(1,-1)
         out = F.relu(self.linear1(embeds))
         out = self.output(out)

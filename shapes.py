@@ -10,6 +10,10 @@ print(x)
 print(x.shape)
 
 
+print(x[0])
+x = x.view(3,8)
+print(x[0])
+
 x = x.view(-1)
 print(x)
 print(x.shape)
