@@ -26,16 +26,13 @@ print(word_to_ix)
 tag_to_ix = {"DET": 0, "NN": 1, "V": 2}
 char_to_ix = {}
 
-char_set = set()
 for sent,_ in training_data:
     for w in sent:
-        char_set.update(w)
+        
         for char in w:
             if char not in char_to_ix:
                 char_to_ix[char] = len(char_to_ix)
     
-char_to_ix2={ ch:i for i,ch in enumerate(char_set)}
-
 
 EMBEDDING_DIM = 6
 HIDDEN_DIM = 6
