@@ -1,3 +1,6 @@
+# This script presents how batching in LSTM work
+# how to prepare input for lstm, 
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -18,10 +21,13 @@ def init_hidden(batch_size=1, hidden_size=3):
     return (2*torch.ones(1, batch_size, hidden_size), 2*torch.ones(1, batch_size, hidden_size))
 
 
-
-
 lstm = nn.LSTM(2, 3)  # Input dim is 2, output dim is 3
-inputs = init_inputs(num=1, shape=(1,2))
+linear = nn.Linear(3, 2)
+# fill linear weight with 1.0
+linear.weight.data.fill_(1.0)
+
+# gen some input, one sequence with 4 vectors
+inputs = init_inputs(num=1, shape=(1, 2))
 # initialize the hidden state.
 hidden = init_hidden(hidden_size=3)
 
@@ -31,6 +37,8 @@ for seq in inputs:
         # after each step, hidden contains the hidden state.
         out, hidden = lstm(i.view(1, 1, -1), hidden)
         print(out, hidden)
+        lin_out = linear(out)
+        print(lin_out)
 
 # alternatively, we can do the entire sequence all at once.
 # the first value returned by LSTM is all of the hidden states throughout
@@ -54,6 +62,8 @@ hidden = init_hidden(hidden_size=3)
 out, hidden = lstm(inputs2, hidden)
 print(out)
 print(hidden)
+lin_out = linear(out)
+print(lin_out)
 
 
 # cretea 2D list of list of tensors of default shape
@@ -98,13 +108,3 @@ hidden = init_hidden(batch_size=2, hidden_size=3)
 out, hidden = lstm(input_tensor, hidden)
 print(out)
 print(hidden)
-
-
-# inputs3 = torch.cat(inputs_batch)
-# print(inputs3)
-# inputs3 = inputs3.view(len(inputs), 2, -1)
-# print(inputs3)
-# hidden = init_hidden()
-# out, hidden = lstm(inputs3, hidden)
-# print(out)
-# print(hidden3)
