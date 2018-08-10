@@ -166,7 +166,7 @@ def train(category_tensor, line_tensor):
 import time
 import math
 
-n_iters = 100000
+n_iters = 20000
 print_every = 5000
 plot_every = 1000
 
@@ -200,3 +200,10 @@ for iter in range(1, n_iters + 1):
     if iter % plot_every == 0:
         all_losses.append(current_loss / plot_every)
         current_loss = 0
+
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+plt.figure()
+plt.plot(all_losses)
+plt.show()
