@@ -1,6 +1,10 @@
 
+# -*- coding: utf-8 -*-
+"""
+This is tutorial from  https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html
 
-# https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html
+"""
+
 
 from __future__ import unicode_literals, print_function, division
 from io import open
@@ -8,11 +12,14 @@ import unicodedata
 import string
 import re
 import random
+import time
 
 import torch
 import torch.nn as nn
 from torch import optim
 import torch.nn.functional as F
+
+from helpers import *
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -46,21 +53,6 @@ class Lang:
 # http://stackoverflow.com/a/518232/2809427
 
 
-def unicodeToAscii(s):
-    return ''.join(
-        c for c in unicodedata.normalize('NFD', s)
-        if unicodedata.category(c) != 'Mn'
-    )
-
-# Lowercase, trim, and remove non-letter characters
-
-
-def normalizeString(s):
-    s = unicodeToAscii(s.lower().strip())
-    s = re.sub(r"([.!?])", r" \1", s)
-    s = re.sub(r"[^a-zA-Z.!?]+", r" ", s)
-    return s
-
 
 def readLangs(lang1, lang2, reverse=False):
     print("Reading lines...")
@@ -69,7 +61,7 @@ def readLangs(lang1, lang2, reverse=False):
     lines = open('data/data_translation/%s-%s.txt' % (lang1, lang2), encoding='utf-8').\
         read().strip().split('\n')
 
-    lines = lines[:20]
+    lines = lines[100:300]
 
     # Split every line into pairs and normalize
     pairs = [[normalizeString(s) for s in l.split('\t')] for l in lines]
@@ -86,7 +78,7 @@ def readLangs(lang1, lang2, reverse=False):
     return input_lang, output_lang, pairs
 
 
-MAX_LENGTH = 10
+MAX_LENGTH = 6#10
 
 eng_prefixes = (
     "i am ", "i m ",
@@ -98,14 +90,14 @@ eng_prefixes = (
 )
 
 
-def filterPair(p):
+def filterPair(p, prefixes):
     return len(p[0].split(' ')) < MAX_LENGTH and \
         len(p[1].split(' ')) < MAX_LENGTH and \
-        p[1].startswith(eng_prefixes)
+        p[1].startswith(prefixes)
 
 
 def filterPairs(pairs):
-    return [pair for pair in pairs if filterPair(pair)]
+    return [pair for pair in pairs if filterPair(pair, eng_prefixes)]
 
 
 def prepareData(lang1, lang2, reverse=False):
@@ -250,7 +242,7 @@ def train(input_tensor, target_tensor, encoder, decoder, encoder_optimizer, deco
 
     decoder_hidden = encoder_hidden
 
-    use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
+    use_teacher_forcing = True # True if random.random() < teacher_forcing_ratio else False
 
     if use_teacher_forcing:
         # Teacher forcing: Feed the target as the next input
@@ -378,10 +370,10 @@ def evaluateRandomly(encoder, decoder, n=10):
 
 
 
-hidden_size = 256
+hidden_size = 4
 encoder1 = EncoderRNN(input_lang.n_words, hidden_size).to(device)
 attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
 
-trainIters(encoder1, attn_decoder1, 75000, print_every=5000)
+trainIters(encoder1, attn_decoder1, 100, print_every=25)
 
 evaluateRandomly(encoder1, attn_decoder1)
