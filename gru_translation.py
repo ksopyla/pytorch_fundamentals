@@ -78,7 +78,7 @@ def readLangs(lang1, lang2, reverse=False):
     return input_lang, output_lang, pairs
 
 
-MAX_LENGTH = 6#10
+MAX_LENGTH = 10
 
 eng_prefixes = (
     "i am ", "i m ",
@@ -320,6 +320,7 @@ def showPlot(points):
     loc = ticker.MultipleLocator(base=0.2)
     ax.yaxis.set_major_locator(loc)
     plt.plot(points)
+    plt.show()
 
 
 def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
@@ -370,10 +371,10 @@ def evaluateRandomly(encoder, decoder, n=10):
 
 
 
-hidden_size = 4
+hidden_size = 32
 encoder1 = EncoderRNN(input_lang.n_words, hidden_size).to(device)
 attn_decoder1 = AttnDecoderRNN(hidden_size, output_lang.n_words, dropout_p=0.1).to(device)
 
-trainIters(encoder1, attn_decoder1, 100, print_every=25)
+trainIters(encoder1, attn_decoder1, 50000, print_every=1000)
 
 evaluateRandomly(encoder1, attn_decoder1)

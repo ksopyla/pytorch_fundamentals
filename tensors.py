@@ -29,9 +29,9 @@ if torch.cuda.is_available():
     b = b.cuda()
     torch.cuda.synchronize()
     torch.cuda.synchronize()
-    
+
     t1 = time.perf_counter()
-    
+
     c = a*b
     torch.cuda.synchronize()
     t2 = time.perf_counter()
@@ -40,9 +40,21 @@ else:
     print('GPU not enabled')
 
 
-b1 = torch.zeros(1, 1, 4).fill_(2)
-b2 = torch.zeros(1, 4, 3).fill_(1)
+# batch matrix matrix mulltiplication
+import numpy as np
 
+# b1 = torch.zeros(1, 1, 4).fill_(2) # [ [ [2,2,2,2] ] ]
+# b2 = torch.zeros(1, 4, 3).fill_(1) # [ [ [1,1,1,1] ] ]
+
+na = np.array([[1000, 100, 10, 1]], dtype=np.float32)
+b1 = torch.from_numpy(na)
+b1 = b1.unsqueeze(0)  # add 3 dim (batch dim)
+
+
+na = np.arange(1, 13, dtype=np.float32)
+na = na.reshape([4, 3])
+b2 = torch.from_numpy(na)
+b2 = b2.unsqueeze(0)  # add 3 dim (batch dim)
 
 print(b1, b2)
 batch_mul = torch.bmm(b1, b2)
