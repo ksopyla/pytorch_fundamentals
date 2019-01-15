@@ -10,7 +10,7 @@ import numpy as np
 ## prepare the data
 
 # we simulate 3 class classification problem, our model retunrs from last layer this output
-np_output1 = np.array([[0.5, 0.1, 0.3 ]], dtype=np.float32)
+np_output1 = np.array([[0.5, 0.1, 0.4 ]], dtype=np.float32)
 np_output2 = np.array([[0.1, 0.5, 0.3 ]], dtype=np.float32)
 output1 = torch.from_numpy(np_output1)
 output2 = torch.from_numpy(np_output2)
@@ -20,14 +20,14 @@ print(f'output1={output1} target={target1}')
 print(f'output1={output2} target={target2}')
 
 # but we know our target class, encoded as one hot encoding
-np_target = np_output2 = np.array([[1, 0, 0 ]], dtype=np.float32)
+np_target = np.array([[1, 0, 0 ]], dtype=np.float32)
 cls_target = torch.from_numpy(np_target)
 
 # L1 loss
 print("L1")
 loss = nn.L1Loss()
 loss_value = loss(output1, cls_target)
-print(loss_value) # (|0.5-1| + |0.1-0| + |0.3-0|)/3 = (0.5+0.1+0.3)/3 = 0.9/3 = 0.3
+print(loss_value) # (|0.5-1| + |0.1-0| + |0.4-0|)/3 = (0.5+0.1+0.4)/3 = 1.0/3 = 0.333
 
 # for second wrong output the loss should be higher
 loss_value = loss(output2, cls_target)
@@ -73,21 +73,24 @@ print(loss_value) # =
 # we simulate 3 variable regression problem, our model retunrs from last layer this output
 np_output1 = np.array([[-0.9, 3.3, 4.5 ]], dtype=np.float32)
 np_output2 = np.array([[5., -1, 3. ]], dtype=np.float32)
-output1 = torch.from_numpy(np_output1)
-print(output1)
-output2 = torch.from_numpy(np_output2)
-print(output2)
-
 # but we know our target is
-np_target = np_output2 = np.array([[-1., 3., 4. ]], dtype=np.float32)
+np_target = np.array([[-1., 3., 4. ]], dtype=np.float32)
+
+# make tensors
+output1 = torch.from_numpy(np_output1)
+output2 = torch.from_numpy(np_output2)
 reg_target = torch.from_numpy(np_target)
+
+print(f'output1={output1}')
+print(f'output2={output2}')
+print(f'target={reg_target}')
 
 # L2 loss - MSE - mean square error
 print("MSEs")
 loss = nn.MSELoss()
 loss_value = loss(output1, reg_target)
-print(loss_value) # ((-0.9- -1)^2 + (3.3-3)^2 + (4.5-4)^2)/3 = 0.1167
+print(f'loss(output1, target)={loss_value}') # ((-0.9- -1)^2 + (3.3-3)^2 + (4.5-4)^2)/3 = 0.1167
 
 # for second wrong output the loss should be higher
 loss_value = loss(output2, reg_target)
-print(loss_value) # = 
+print(f'loss(output2, target)={loss_value}') # = 17.666
