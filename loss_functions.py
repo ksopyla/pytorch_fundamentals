@@ -95,7 +95,7 @@ print(f'loss(output1, target)={loss_value}') # ((-0.9- -1)^2 + (3.3-3)^2 + (4.5-
 loss_value = loss(output2, reg_target)
 print(f'loss(output2, target)={loss_value}')  # = 17.666
 
-
+print("MSEs - without reduction")
 loss = nn.MSELoss(reduction='none')
 loss_value = loss(output1, reg_target)
-print(f'loss(output1, target)={loss_value}') # ((-0.9- -1)^2 + (3.3-3)^2 + (4.5-4)^2)/3 = 0.1167
+print(f'loss(output1, target)={loss_value}') # [(-0.9- -1)^2 ,  (3.3-3)^2,  (4.5-4)^2 ] = [ 0.01, 0.09, 0.25]
