@@ -22,6 +22,9 @@ output = drop(input)
 # eg. 2*10*0.5 = 10
 zeros = torch.sum( output==0 )
 print(f'zeros={zeros}')
-# ohhh! Where my '1' go? Each value was scaled by prob 1/prob
+# ohhh! Where my '1' go? Each value was scaled by prob 1/prob, 
 print(f'output={output}')
 
+
+for b, i in enumerate(range(0, 20, 5)):
+    print(b,i)
