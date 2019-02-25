@@ -119,39 +119,38 @@ np_target = np.array([[0.1, 0.9],[0.5, 0.7]], dtype=np.float32)
 # make tensors
 output1 = torch.from_numpy(np_output1)
 output2 = torch.from_numpy(np_output2)
-reg_target = torch.from_numpy(np_target)
+target = torch.from_numpy(np_target)
 
 # Binary Cross Entropy
 print("BCELoss")
 print(f'output1={output1}')
 print(f'output2={output2}')
-print(f'target={reg_target}')
+print(f'target={target}')
 
 
 loss = nn.BCELoss()
 
 # L= sum_i { l_i = -1*[ y_i * log(x_i) + (1-y_i)*log(1-x_i) ]}
-loss_value = loss(output1, reg_target)
+loss_value = loss(output1, target)
 print(f'loss(output1, target)={loss_value}') # 
 
 # for second wrong output the loss should be higher
-loss_value = loss(output2, reg_target)
+loss_value = loss(output2, target)
 print(f'loss(output2, target)={loss_value}')  # = 
 
 print("BCELoss - without reduction")
 loss = nn.BCELoss(reduction='none')
-loss_value = loss(output1, reg_target)
+loss_value = loss(output1, target)
 print(f'loss(output1, target)={loss_value}') # =
 
-
-print(f'output1={output1}')
-print(f'output2={output2}')
-print(f'target={reg_target}')
-
-reg_target2 = torch.FloatTensor(2,2).random_(2)
-
+print("BCELoss - reduction sum")
+loss = nn.BCELoss(reduction='sum')
+loss_value = loss(output1, target)
+print(f'loss(output1, target)={loss_value}') # =
 
 lst = []
-for i in range(len(output1)):
+x = output1.numpy()
+y = target.numpy()
+for i in range(len(x)):
     lst.append(-np.log(x[i])*y[i] + -np.log(1-x[i])*(1-y[i]))
-lst, np.mean(lst)
+print(lst, np.mean(lst))
