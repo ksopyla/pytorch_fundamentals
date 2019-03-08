@@ -108,13 +108,13 @@ print(f'loss(output1, target)={loss_value}') # [(-0.9- -1)^2 ,  (3.3-3)^2,  (4.5
 
 # BCE loss
 
-# we have batch_size=2 (one example in a row), multi label problem 
+# we have batch_size=3 (one example in a row), multi label problem 
 # this should be returned in the last layer of our model
 # data shouldbe numbers from [0,1]
-np_output1 = np.array([[0.1, 0.9], [0.6, 0.8]], dtype=np.float32)
-np_output2 = np.array([[0.4, 0.5], [0.1, 0.9]], dtype=np.float32)
+np_output1 = np.array([[0.1, 0.9], [0.6, 0.8], [0.8, 1.]], dtype=np.float32)
+np_output2 = np.array([[0.4, 0.5], [0.1, 0.9], [0.1, 0.9]], dtype=np.float32)
 # but we know our target is
-np_target = np.array([[0.1, 0.9],[0.5, 0.7]], dtype=np.float32)
+np_target = np.array([[0., 1.],[1., 0.],[1., 1.]], dtype=np.float32)
 
 # make tensors
 output1 = torch.from_numpy(np_output1)
