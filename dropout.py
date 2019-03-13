@@ -18,7 +18,7 @@ print(f'input={input}')
 # with probability 'prob' change each tensor value to 0
 output = drop(input)
 
-# count how many zeros, shoud be about rows*columns*prob zeros
+# count how many zeros, should be about rows*columns*prob zeros
 # eg. 2*10*0.5 = 10
 zeros = torch.sum( output==0 )
 print(f'zeros={zeros}')
