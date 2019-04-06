@@ -5,7 +5,8 @@ import torch.optim as optim
 
 import numpy as np
 
-# classfication losses
+# Classfication losses
+
 
 ## prepare the data
 
@@ -70,23 +71,25 @@ print(loss_value) # =
 # regression problem 
 
 
-# we simulate 3 variable regression problem, our model retunrs from last layer this output
-np_output1 = np.array([[-0.9, 3.3, 4.5 ]], dtype=np.float32)
-np_output2 = np.array([[5., -1, 3. ]], dtype=np.float32)
+# we simulate 3 variable regression problem, our model returns from last layer this output
+np_output1 = np.array([-0.9, 3.3, 4.5 ], dtype=np.float32)
+np_output2 = np.array([5., -1, 3. ], dtype=np.float32)
 # but we know our target is
-np_target = np.array([[-1., 3., 4. ]], dtype=np.float32)
+np_target = np.array([-1., 3., 4. ], dtype=np.float32)
 
 # make tensors
 output1 = torch.from_numpy(np_output1)
 output2 = torch.from_numpy(np_output2)
 reg_target = torch.from_numpy(np_target)
 
+
+# L2 loss - MSE - mean square error
+print("MSE Loss")
 print(f'output1={output1}')
 print(f'output2={output2}')
 print(f'target={reg_target}')
 
-# L2 loss - MSE - mean square error
-print("MSEs")
+
 loss = nn.MSELoss()
 loss_value = loss(output1, reg_target)
 print(f'loss(output1, target)={loss_value}') # ((-0.9- -1)^2 + (3.3-3)^2 + (4.5-4)^2)/3 = 0.1167
@@ -99,3 +102,55 @@ print("MSEs - without reduction")
 loss = nn.MSELoss(reduction='none')
 loss_value = loss(output1, reg_target)
 print(f'loss(output1, target)={loss_value}') # [(-0.9- -1)^2 ,  (3.3-3)^2,  (4.5-4)^2 ] = [ 0.01, 0.09, 0.25]
+
+
+# Multi-label
+
+# BCE loss
+
+# we have batch_size=3 (one example in a row), multi label problem 
+# this should be returned in the last layer of our model
+# data shouldbe numbers from [0,1]
+np_output1 = np.array([[0.1, 0.9], [0.6, 0.8], [0.8, 1.]], dtype=np.float32)
+np_output2 = np.array([[0.4, 0.5], [0.1, 0.9], [0.1, 0.9]], dtype=np.float32)
+# but we know our target is
+np_target = np.array([[0., 1.],[1., 0.],[1., 1.]], dtype=np.float32)
+
+# make tensors
+output1 = torch.from_numpy(np_output1)
+output2 = torch.from_numpy(np_output2)
+target = torch.from_numpy(np_target)
+
+# Binary Cross Entropy
+print("BCELoss")
+print(f'output1={output1}')
+print(f'output2={output2}')
+print(f'target={target}')
+
+
+loss = nn.BCELoss()
+
+# L= sum_i { l_i = -1*[ y_i * log(x_i) + (1-y_i)*log(1-x_i) ]}
+loss_value = loss(output1, target)
+print(f'loss(output1, target)={loss_value}') # 
+
+# for second wrong output the loss should be higher
+loss_value = loss(output2, target)
+print(f'loss(output2, target)={loss_value}')  # = 
+
+print("BCELoss - without reduction")
+loss = nn.BCELoss(reduction='none')
+loss_value = loss(output1, target)
+print(f'loss(output1, target)={loss_value}') # =
+
+print("BCELoss - reduction sum")
+loss = nn.BCELoss(reduction='sum')
+loss_value = loss(output1, target)
+print(f'loss(output1, target)={loss_value}') # =
+
+lst = []
+x = output1.numpy()
+y = target.numpy()
+for i in range(len(x)):
+    lst.append(-np.log(x[i])*y[i] + -np.log(1-x[i])*(1-y[i]))
+print(lst, np.mean(lst))

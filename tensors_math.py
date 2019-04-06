@@ -1,3 +1,7 @@
+'''
+Presents basic tensor math operations. Adding, multiplication, matrix multiplication etc.
+
+'''
 from __future__ import print_function
 import torch
 import time
@@ -60,27 +64,3 @@ print(b1, b2)
 batch_mul = torch.bmm(b1, b2)
 print(batch_mul)
 
-
-# split tensors
-
-a = torch.randn(50, 80) #tensor of size 50 x 80
-b = torch.split(a, 20, dim=1) # it returns a tuple
-b = list(b) # convert to list if you want
-
-
-a = torch.randn(10, 6, 8) # 3d tensor
-b = torch.split(a, 4, dim=0) # it returns a tuple
-#b = list(b) # convert to list if you want
-print(f'shape of the first element {b[0].shape}')
-print(f'shape of the last element {b[-1].shape}')
-
-b = torch.split(a, 4, dim=1) # now we split through dim=1
-#b = list(b) # convert to list if you want
-print(f'shape of the first element {b[0].shape}')
-print(f'shape of the last element {b[-1].shape}')
-
-
-b = torch.chunk(a, 4, dim=0) # now we split through dim=1
-#b = list(b) # convert to list if you want
-print(f'shape of the first element {b[0].shape}')
-print(f'shape of the last element {b[-1].shape}')
