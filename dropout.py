@@ -1,4 +1,6 @@
 
+# Unclear Behaviour of Dropout()
+#https://discuss.pytorch.org/t/unclear-behaviour-of-dropout/22890
 
 import torch.nn as nn
 import torch
