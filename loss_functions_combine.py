@@ -12,7 +12,7 @@ import numpy as np
 
 # we simulate 2x3 class classification problem, our model returns from last layer this output
 # first 3 are for first feature, last 3 are for second feature, each can have 3 values
-np_output1 = np.array([0.7, 0.1, 0.2, 0.1, 0.1, 0.8  ], dtype=np.float32)
+np_output1 = np.array([0.99, 0.005, 0.005, 0.1, 0.1, 0.8  ], dtype=np.float32)
 np_output2 = np.array([0.1, 0.7, 0.2, 0.9, 0.05, 0.05  ], dtype=np.float32)
 
 output1 = torch.tensor([ np_output1], requires_grad=True)
@@ -99,13 +99,10 @@ print(batch_output)
 batch_output = batch_output.transpose(1,2)
 print(batch_output)
 
-
 batch_target = torch.tensor([ [target1, target2], [target1, target2]], dtype=torch.int64)
-
 
 loss_value = loss(batch_output, batch_target)
 print(loss_value) 
-
 
 loss_value.sum().backward()
 print(output1.grad)
