@@ -88,8 +88,10 @@ print(output2.grad)
 
 # CrossEntropy for mini batch of size 2 and reshape
 print("CrossEntropyLoss - batch combined k-dim")
-loss = nn.CrossEntropyLoss(reduction='none')
-#loss = nn.CrossEntropyLoss(reduction='mean')
+
+# loss = nn.CrossEntropyLoss(reduction='none')
+# loss = nn.CrossEntropyLoss(reduction='mean')
+loss = nn.CrossEntropyLoss(reduction='sum')
 
 batch_output = torch.cat([output1, output2])
 print(batch_output)
