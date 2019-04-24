@@ -1,5 +1,5 @@
 '''
-Example shows how to compute combined softmax for multilabel, but not binary problem.
+Example shows how to compute combined softmax for multilabel multivalue setting.
 '''
 import torch
 import torch.nn as nn
